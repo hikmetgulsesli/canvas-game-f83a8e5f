@@ -15,14 +15,20 @@ export interface PlayPageCanvasPlayGameProps {
     "start-game-1"?: () => void;
   };
 
+  /** Status message text bound to SURF_STATUS_MESSAGE. */
+  statusText?: string;
+  /** Score text bound to SURF_SCORE_DISPLAY. */
+  scoreText?: string;
+  /** Application state bound to SURF_GAME_CANVAS. */
+  sessionState?: 'idle' | 'playing';
 }
 
 export type PlayPageCanvasPlayGameActionCallbacks = NonNullable<PlayPageCanvasPlayGameProps["actions"]>;
 
-export function PlayPageCanvasPlayGame({ actions }: PlayPageCanvasPlayGameProps) {
+export function PlayPageCanvasPlayGame({ actions, statusText = "Ready to play", scoreText = "0", sessionState = "idle" }: PlayPageCanvasPlayGameProps) {
   return (
     <>
-      <div data-surface-id="SURF_PLAY_PAGE" className="flex-1 flex flex-col min-h-screen w-full" data-setfarm-element-ref="E000001" data-observable-refs="OBS_START_GAME_ROUTE_UNCHANGED">
+      <div data-surface-id="SURF_PLAY_PAGE" className="flex-1 flex flex-col min-h-screen w-full" data-setfarm-element-ref="E000001" data-observable-refs="OBS_START_GAME_ROUTE_UNCHANGED" data-route="/play">
           {/* Header bar */}
           <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur px-8 py-4 flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -47,13 +53,13 @@ export function PlayPageCanvasPlayGame({ actions }: PlayPageCanvasPlayGameProps)
               {/* Status Message Surface */}
               <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-center shadow-lg shadow-black/20">
                 <span className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Status</span>
-                <div data-surface-id="SURF_STATUS_MESSAGE" className="text-lg font-semibold text-emerald-400 flex items-center gap-2" data-setfarm-element-ref="E000002" data-observable-refs="OBS_START_GAME_STATUS_TEXT">Ready to play</div>
+                <div data-surface-id="SURF_STATUS_MESSAGE" className="text-lg font-semibold text-emerald-400 flex items-center gap-2" data-setfarm-element-ref="E000002" data-observable-refs="OBS_START_GAME_STATUS_TEXT" data-value={statusText}>{statusText}</div>
               </div>
       
               {/* Score Display Surface */}
               <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-center shadow-lg shadow-black/20">
                 <span className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Score</span>
-                <div data-surface-id="SURF_SCORE_DISPLAY" className="text-2xl font-mono font-bold text-slate-100 tracking-tight" data-setfarm-element-ref="E000003" data-observable-refs="OBS_START_GAME_SCORE_VALUE">0</div>
+                <div data-surface-id="SURF_SCORE_DISPLAY" className="text-2xl font-mono font-bold text-slate-100 tracking-tight" data-setfarm-element-ref="E000003" data-observable-refs="OBS_START_GAME_SCORE_VALUE" data-value={scoreText}>{scoreText}</div>
               </div>
       
               {/* Start Game Control Surface/Container */}
@@ -82,8 +88,8 @@ export function PlayPageCanvasPlayGame({ actions }: PlayPageCanvasPlayGameProps)
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                   </div>
-                  <p className="text-sm font-medium text-slate-400 mb-1">Game canvas standby</p>
-                  <p className="text-xs text-slate-600 max-w-sm">Canvas arena is initialized and awaiting session launch</p>
+                  <p className="text-sm font-medium text-slate-400 mb-1">{sessionState === 'playing' ? 'Game session running' : 'Game canvas standby'}</p>
+                  <p className="text-xs text-slate-600 max-w-sm">{sessionState === 'playing' ? 'Canvas arena is live for the current session' : 'Canvas arena is initialized and awaiting session launch'}</p>
                 </div>
       
                 {/* Decorative subtle grid overlay */}
