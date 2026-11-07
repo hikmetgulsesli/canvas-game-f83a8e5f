@@ -19,11 +19,13 @@ export interface PlayPageCanvasPlayGameProps {
   statusText?: string;
   /** Score text bound to SURF_SCORE_DISPLAY. */
   scoreText?: string;
+  /** Application state bound to SURF_GAME_CANVAS. */
+  sessionState?: 'idle' | 'playing';
 }
 
 export type PlayPageCanvasPlayGameActionCallbacks = NonNullable<PlayPageCanvasPlayGameProps["actions"]>;
 
-export function PlayPageCanvasPlayGame({ actions, statusText = "Ready to play", scoreText = "0" }: PlayPageCanvasPlayGameProps) {
+export function PlayPageCanvasPlayGame({ actions, statusText = "Ready to play", scoreText = "0", sessionState = "idle" }: PlayPageCanvasPlayGameProps) {
   return (
     <>
       <div data-surface-id="SURF_PLAY_PAGE" className="flex-1 flex flex-col min-h-screen w-full" data-setfarm-element-ref="E000001" data-observable-refs="OBS_START_GAME_ROUTE_UNCHANGED" data-route="/play">
@@ -86,8 +88,8 @@ export function PlayPageCanvasPlayGame({ actions, statusText = "Ready to play", 
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                   </div>
-                  <p className="text-sm font-medium text-slate-400 mb-1">Game canvas standby</p>
-                  <p className="text-xs text-slate-600 max-w-sm">Canvas arena is initialized and awaiting session launch</p>
+                  <p className="text-sm font-medium text-slate-400 mb-1">{sessionState === 'playing' ? 'Game session running' : 'Game canvas standby'}</p>
+                  <p className="text-xs text-slate-600 max-w-sm">{sessionState === 'playing' ? 'Canvas arena is live for the current session' : 'Canvas arena is initialized and awaiting session launch'}</p>
                 </div>
       
                 {/* Decorative subtle grid overlay */}
